@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:oil_tracker/models/record.dart';
+import 'package:oil_tracker/repo/record_repo.dart';
+import 'package:oil_tracker/repo/record_repo_memory.dart';
 import 'package:oil_tracker/screens/new_record.dart';
 import 'package:oil_tracker/screens/record_list.dart';
-import 'package:uuid/uuid.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -14,26 +15,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Record> _records = [
-    Record(
-      id: '1',
-      title: 'Nhot May',
-      currentDistance: 1245,
-      date: DateTime.now().subtract(const Duration(days: 1)),
-    ),
-    Record(
-      id: '2',
-      title: 'Nhot May',
-      currentDistance: 42,
-      date: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-    Record(
-      id: '3',
-      title: 'Nhot So',
-      currentDistance: 899,
-      date: DateTime.now().subtract(const Duration(days: 3)),
-    ),
-  ];
+  final RecordRepo _recordRepo = RecordRepoMemoryImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +26,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SafeArea(
         child: Center(
           child: RecordList(
-            records: _records,
-            deleteFunc: _deleteRecord,
+            records: _recordRepo.getRecords(),
+            deleteFunc: _deleteFunc,
           ),
         ),
       ),
@@ -64,28 +46,20 @@ class _MyHomePageState extends State<MyHomePage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
       ),
       builder: (_) {
-        return NewRecord(addRecord: _newRecord);
+        return NewRecord(addRecord: _newRecordFunc);
       },
     );
   }
 
-  void _newRecord(String title, int currentDistance, DateTime dateTime) {
-    var uuid = const Uuid();
-    var transaction = Record(
-      id: uuid.v1(),
-      title: title,
-      currentDistance: currentDistance,
-      date: dateTime,
-    );
-
+  void _newRecordFunc(Record record) {
     setState(() {
-      _records.add(transaction);
+      _recordRepo.newRecord(record);
     });
   }
 
-  void _deleteRecord(String id) {
+  void _deleteFunc(String id) {
     setState(() {
-      _records.removeWhere((trx) => trx.id == id);
+      _recordRepo.deleteRecord(id);
     });
   }
 }

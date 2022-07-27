@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:oil_tracker/models/record.dart';
 import 'package:oil_tracker/screens/widgets/adaptive_button.dart';
 
 class NewRecord extends StatefulWidget {
@@ -90,11 +91,14 @@ class _NewRecordState extends State<NewRecord> {
       return;
     }
 
-    widget.addRecord(
-      enteredTitle,
-      enteredCurrentDistance,
-      selectedDate,
+    var record = Record(
+      id: "",
+      title: enteredTitle,
+      currentDistance: enteredCurrentDistance,
+      date: selectedDate!,
     );
+
+    widget.addRecord(record);
     Navigator.of(context).pop();
   }
 

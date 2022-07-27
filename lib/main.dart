@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:oil_tracker/home_page.dart';
 
 void main() {
-  print('fuck main');
   runApp(const MyApp());
 }
 
