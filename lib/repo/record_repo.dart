@@ -1,7 +1,7 @@
 import 'package:oil_tracker/models/record.dart';
 
 abstract class RecordRepo {
-  List<Record> getRecords();
-  Record newRecord(Record record);
-  void deleteRecord(String id);
+  Future<List<Record>> getRecords();
+  Future<Record> newRecord(Record record);
+  Future<void> deleteRecord(String id);
 }

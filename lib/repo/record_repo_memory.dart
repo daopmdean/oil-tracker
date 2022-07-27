@@ -25,17 +25,17 @@ class RecordRepoMemoryImpl implements RecordRepo {
   ];
 
   @override
-  void deleteRecord(String id) {
+  Future<void> deleteRecord(String id) async {
     _records.removeWhere((r) => r.id == id);
   }
 
   @override
-  List<Record> getRecords() {
+  Future<List<Record>> getRecords() async {
     return _records;
   }
 
   @override
-  Record newRecord(Record record) {
+  Future<Record> newRecord(Record record) async {
     var uuid = const Uuid();
     var newRecord = Record(
       id: uuid.v1(),
